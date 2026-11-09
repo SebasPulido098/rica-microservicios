@@ -1,20 +1,20 @@
 package com.rica.publicacionesservice.publicaciones;
 
-
 import java.util.Map;
 
-
 public class PublicacionResponse {
-    private String id;
 
+    private String id;
     private String investigadorCorreo;
     private String titulo;
     private String tipo;
     private Integer anio;
     private Map<String, String> detalles;
 
-    public PublicacionResponse(String id, String investigadorCorreo, String titulo, String tipo, Integer anio,
-            Map<String, String> detalles) {
+    public PublicacionResponse() {
+    }
+
+    public PublicacionResponse(String id, String investigadorCorreo, String titulo, String tipo, Integer anio, Map<String, String> detalles) {
         this.id = id;
         this.investigadorCorreo = investigadorCorreo;
         this.titulo = titulo;
@@ -71,6 +71,4 @@ public class PublicacionResponse {
         this.detalles = detalles;
     }
 
-    
-    
 }

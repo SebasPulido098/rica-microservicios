@@ -2,7 +2,6 @@ package com.rica.investigadoresservice.investigadores.infraestructura.entrada.we
 
 import com.rica.investigadoresservice.investigadores.aplicacion.InvestigadorUseCase;
 import com.rica.investigadoresservice.investigadores.dominio.Investigador;
-
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +32,19 @@ public class InvestigadorController {
         return InvestigadorMapper.aResponse(investigador);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        investigadorService.iniciarEliminacion(id);
+        // 202: la eliminación es asíncrona (Saga); aún no ha terminado.
+        return ResponseEntity.accepted().build();
+    }
+
     @PostMapping
     public ResponseEntity<InvestigadorResponse> registrar(@Valid @RequestBody InvestigadorRequest request) {
         Investigador guardado = investigadorService.registrar(
                 request.getNombreCompleto(),
                 request.getCorreoInstitucional(),
-                request.getGrupoInvestigacion()
-        );
+                request.getGrupoInvestigacion());
         InvestigadorResponse response = InvestigadorMapper.aResponse(guardado);
         return ResponseEntity
                 .created(URI.create("/api/investigadores/" + guardado.getId()))

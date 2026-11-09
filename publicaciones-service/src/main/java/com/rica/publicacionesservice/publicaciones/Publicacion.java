@@ -1,6 +1,5 @@
 package com.rica.publicacionesservice.publicaciones;
 
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,8 +16,18 @@ public class Publicacion {
     private String tipo;
     private Integer anio;
     private Map<String, String> detalles;
+    private boolean huerfana;
 
     public Publicacion() {
+    }
+
+    public Publicacion(String id, String investigadorCorreo, String titulo, String tipo, Integer anio, Map<String, String> detalles) {
+        this.id = id;
+        this.investigadorCorreo = investigadorCorreo;
+        this.titulo = titulo;
+        this.tipo = tipo;
+        this.anio = anio;
+        this.detalles = detalles;
     }
 
     public String getId() {
@@ -69,6 +78,12 @@ public class Publicacion {
         this.detalles = detalles;
     }
 
-    
-    // ... getters y setters de cada atributo
+    public boolean isHuerfana() {
+        return huerfana;
+    }
+
+    public void marcarComoHuerfana() {
+        this.huerfana = true;
+    }
+
 }

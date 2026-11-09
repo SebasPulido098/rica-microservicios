@@ -1,9 +1,9 @@
 package com.rica.publicacionesservice.publicaciones;
 
-import java.util.List;
-import org.springframework.http.HttpStatus;
+import com.rica.publicacionesservice.compartido.RecursoNoEncontradoException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 public class PublicacionService {
@@ -11,21 +11,31 @@ public class PublicacionService {
     private final PublicacionRepository publicacionRepository;
     private final VerificadorInvestigador verificadorInvestigador;
     private final LimitePublicacionesAnualesService limitePublicacionesAnualesService;
+    private final PublicadorEventosPublicaciones publicadorEventos;
 
     public PublicacionService(PublicacionRepository publicacionRepository,
-                              VerificadorInvestigador verificadorInvestigador,
-                              LimitePublicacionesAnualesService limitePublicacionesAnualesService) {
+                               VerificadorInvestigador verificadorInvestigador,
+                               LimitePublicacionesAnualesService limitePublicacionesAnualesService,
+                               PublicadorEventosPublicaciones publicadorEventos) {
         this.publicacionRepository = publicacionRepository;
         this.verificadorInvestigador = verificadorInvestigador;
         this.limitePublicacionesAnualesService = limitePublicacionesAnualesService;
+        this.publicadorEventos = publicadorEventos;
     }
 
     public Publicacion registrar(Publicacion publicacion) {
         if (!verificadorInvestigador.existe(publicacion.getInvestigadorCorreo())) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+            throw new RecursoNoEncontradoException(
                     "No existe un investigador con correo " + publicacion.getInvestigadorCorreo());
         }
-        return publicacionRepository.save(publicacion);
+        if (!limitePublicacionesAnualesService.puedeRegistrar(publicacion.getInvestigadorCorreo(), publicacion.getAnio())) {
+            throw new LimiteAnualExcedidoException(
+                    "El investigador " + publicacion.getInvestigadorCorreo()
+                            + " ya alcanzó el máximo de publicaciones registradas para " + publicacion.getAnio());
+        }
+        Publicacion guardada = publicacionRepository.save(publicacion);
+        publicadorEventos.publicacionRegistrada(guardada);
+        return guardada;
     }
 
     public List<Publicacion> listarPorInvestigador(String investigadorCorreo) {
@@ -34,7 +44,8 @@ public class PublicacionService {
 
     public Publicacion buscarPorId(String id) {
         return publicacionRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                .orElseThrow(() -> new RecursoNoEncontradoException(
                         "No existe una publicación con id " + id));
     }
+
 }
