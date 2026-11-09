@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 public class LimitePublicacionesAnualesService {
 
     private static final int MAXIMO_POR_ANIO = 5;
+
     private final PublicacionRepository publicacionRepository;
 
     public LimitePublicacionesAnualesService(PublicacionRepository publicacionRepository) {
@@ -13,8 +14,8 @@ public class LimitePublicacionesAnualesService {
     }
 
     public boolean puedeRegistrar(String investigadorCorreo, Integer anio) {
-        long registradasEsteAnio = publicacionRepository.countByInvestigadorCorreoAndAnio(
-                investigadorCorreo, anio);
+        long registradasEsteAnio = publicacionRepository.countByInvestigadorCorreoAndAnio(investigadorCorreo, anio);
         return registradasEsteAnio < MAXIMO_POR_ANIO;
     }
+
 }

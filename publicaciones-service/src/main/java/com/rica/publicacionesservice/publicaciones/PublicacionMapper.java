@@ -1,10 +1,11 @@
 package com.rica.publicacionesservice.publicaciones;
 
-/**
- * PublicacionMapper
- */
 public class PublicacionMapper {
-        public static Publicacion aEntidad(PublicacionRequest request) {
+
+    private PublicacionMapper() {
+    }
+
+    public static Publicacion aEntidad(PublicacionRequest request) {
         Publicacion publicacion = new Publicacion();
         publicacion.setInvestigadorCorreo(request.getInvestigadorCorreo());
         publicacion.setTitulo(request.getTitulo());
@@ -24,4 +25,5 @@ public class PublicacionMapper {
                 publicacion.getDetalles()
         );
     }
+
 }

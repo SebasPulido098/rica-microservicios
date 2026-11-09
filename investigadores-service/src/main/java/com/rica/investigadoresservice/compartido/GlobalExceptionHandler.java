@@ -1,14 +1,15 @@
 package com.rica.investigadoresservice.compartido;
 
 import com.rica.investigadoresservice.investigadores.dominio.CorreoDuplicadoException;
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -44,4 +45,5 @@ public class GlobalExceptionHandler {
         cuerpo.put("mensaje", mensaje);
         return ResponseEntity.status(estado).body(cuerpo);
     }
+
 }

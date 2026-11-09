@@ -2,13 +2,12 @@ package com.rica.investigadoresservice.investigadores.infraestructura.salida.per
 
 import com.rica.investigadoresservice.investigadores.aplicacion.RepositorioInvestigadores;
 import com.rica.investigadoresservice.investigadores.dominio.Investigador;
-
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 public class InvestigadorRepositoryJpaAdapter implements RepositorioInvestigadores {
 
     private final InvestigadorRepository investigadorRepository;
@@ -33,8 +32,17 @@ public class InvestigadorRepositoryJpaAdapter implements RepositorioInvestigador
     }
 
     @Override
+    public Optional<Investigador> buscarPorCorreo(String correoInstitucional) {
+        return investigadorRepository.findByCorreoInstitucional_Valor(correoInstitucional);
+    }
+
+    @Override
     public Investigador guardar(Investigador investigador) {
         return investigadorRepository.save(investigador);
     }
 
+    @Override
+    public void eliminar(Investigador investigador) {
+        investigadorRepository.delete(investigador);
+    }
 }
