@@ -21,10 +21,6 @@ spring:
               uri: lb://consultas-service
               predicates:
                 - Path=/api/consultas/**
-            - id: consultas-route
-              uri: lb://consultas-service
-              predicates:
-                - Path=/api/consultas/**
 
 eureka:
   instance:
